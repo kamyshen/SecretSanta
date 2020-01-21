@@ -1,0 +1,31 @@
+<nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+    <a class="navbar-brand" href="/">Home</a>
+    <button class="navbar-toggler collapsed ml-auto" type="button" data-toggle="collapse" data-target="#navbarColor01" aria-controls="navbarColor01" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarColor01">
+        <ul class="navbar-nav ml-auto">
+            <% if (isAuthenticated) { %>
+                <li class="nav-item">
+                    <a class="nav-link" href="/profile"><h3>Profile</h3></a>
+                </li>
+            <% } %>
+
+            <% if (!isAuthenticated) { %>
+            <li class="nav-item">
+                <a class="nav-link" href="/users/login"><h3>Login</h3></a>
+            </li>
+
+            <li class="nav-item">
+                <a class="nav-link" href="/users/register"><h3>Register</h3></a>
+            </li>
+            <% } %>
+            <% if (isAuthenticated) { %>
+            <li class="nav-item">
+                <a class="nav-link" href="/users/logout"><h3>Logout</h3></a>
+            </li>
+            <% } %>
+
+        </ul>
+    </div>
+</nav>

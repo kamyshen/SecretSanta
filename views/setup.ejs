@@ -1,0 +1,82 @@
+<div class="container">
+    <div class="row">
+        <div class="col-lg-10 col-xl-9 mx-auto">
+            <div class="card card-signin flex-row my-5">
+                <div class="card-img-left d-none d-md-flex">
+                    <!-- Background image for card set in CSS! -->
+                </div>
+                <div class="card-body data-setup-card">
+                    <h5 class="card-title text-center">Set up a new gift exchange</h5>
+                    <form class="form-signin" method="post">
+                        <div class="form-label-group">
+                            <input
+                                    type="name"
+                                    id="name"
+                                    name="name"
+                                    class="form-control"
+                                    required
+                            />
+                            <label for="name">Name of a new gift exchange</label>
+                        </div>
+
+                        <div class="form-label-group">
+                            <input
+                                    type="date"
+                                    min=<%= current %>
+                                    name="date"
+                                    id="inputDate"
+                                    class="form-control"
+                                    placeholder="Date of the exchange"
+                                    required>
+                            <label for="inputDate">Date of the exchange</label>
+                        </div>
+                        <div class="form-group">
+                            <label for="exampleSelect1">Start day</label>
+                            <select class="form-control" id="exampleSelect1">
+                                <option>1 day</option>
+                                <option>2 days</option>
+                                <option>3 days</option>
+                                <option>4 days</option>
+                                <option>1 week</option>
+                                <option>2 weeks</option>
+                                <option>3 weeks</option>
+                                <option>1 month</option>
+
+                            </select>
+                        </div>
+
+                        <hr>
+
+                        <div class="form-label-group">
+                        <div class="custom-control custom-control-right custom-switch">
+                            <input type="checkbox" class="custom-control-input" id="isParticipant" name="isParticipant"checked>
+                            <label class="custom-control-label data-first" for="isParticipant">Are you going to be a participant?</label>
+                        </div>
+                        </div>
+
+                        <div class="form-label-group">
+                        <div class="custom-control custom-control-right custom-switch">
+                            <input type="checkbox" class="custom-control-input" id="isPriceCap" name="isPriceCap">
+                            <label class="custom-control-label" for="isPriceCap">Would you like to set a price cap on the presents?</label>
+                        </div>
+                        </div>
+
+                        <div id="priceCap" class="form-label-group" hidden>
+                            <input
+                                    type="priceCap"
+                                    id="priceCap"
+                                    name="priceCap"
+                                    class="form-control"
+                            />
+                            <label for="priceCap">Enter the amount and the currency</label>
+                        </div>
+
+                        <button class="btn btn-lg btn-primary btn-block text-uppercase" type="submit">Set up a new exchange</button>
+                        <hr class="my-4">
+                    </form>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

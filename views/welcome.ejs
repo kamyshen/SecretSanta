@@ -1,0 +1,35 @@
+<div class="card card-body text-center">
+
+    <h1 class="display-3">Secret Santa</h1>
+    <p class="lead">Gift exchange "Secret Santa" works in 3 steps:<br />
+        1. Participants register for a gift exchange.<br />
+        2. The site randomizes them so that everyone knows the person they're preparing a gift for.<br />
+        3. When the date of exchange comes, people give each other what they've prepared.<br />
+        But until then no one knows who's giving a gift to them.<br />
+        So it's a lot of fun! Go ahead and try it out!</p>
+    <hr class="my-4">
+    <% if (!isAuthenticated) { %>
+    <div class="buttons d-flex">
+        <div class="imgHolder">
+            <a href="/users/register" role="button"><img src="/images/setupnew.jpg" width="200" alt="giving"></a>
+            <span><h4>Set up a new gift exchange</h4></span>
+        </div>
+        <div class="imgHolder">
+            <a href="/users/register:code" role="button"><img src="/images/haveacode.png" width="280" alt="giving"></a>
+            <span><h4>I have an invitation code</h4></span>
+        </div>
+    </div>
+    <% } else { %>
+        <div class="buttons d-flex">
+            <div class="imgHolder">
+                <a href="/setup" role="button"><img src="/images/setupnew.jpg" width="200" alt="giving"></a>
+                <span><h4>Set up a new gift exchange</h4></span>
+            </div>
+            <div class="imgHolder">
+                <a href="/profile:code" role="button"><img src="/images/haveacode.png" width="280" alt="giving"></a>
+                <span><h4>I have an invitation code</h4></span>
+            </div>
+        </div>
+    <% } %>
+
+</div>
