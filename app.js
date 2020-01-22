@@ -11,7 +11,7 @@ const app = express()
 require('./config/passport')(passport)
 
 const db = require('./config/keys').MongoURI
-mongoose.connect(db, { useNewUrlParser: true, useUnifiedTopology: true})
+mongoose.connect(db, { useNewUrlParser: true, useUnifiedTopology: true, useFindAndModify: false})
     .then(() => console.log('Mongo DB connected...'))
     .catch(err => console.log(err))
 
@@ -37,6 +37,7 @@ app.use((req, res, next) => {
     res.locals.success_msg = req.flash('success_msg')
     res.locals.error_msg = req.flash('error_msg')
     res.locals.error = req.flash('error')
+    res.locals.info = req.flash('info')
     res.locals.isAuthenticated = req.isAuthenticated()
     // res.locals.exchangeCode = req.flash('exchangeCode')
     next()

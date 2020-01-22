@@ -1,5 +1,5 @@
 .data-setup-card {
-    height: 65vh;
+    height: 75vh;
 }
 
 .buttons {
@@ -11,6 +11,10 @@
     .buttons {
         flex-direction: column;
         align-items: center;
+    }
+
+    .data-setup-card {
+        height: 100vh;
     }
 }
 

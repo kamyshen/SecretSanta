@@ -14,6 +14,11 @@ router.get('/register', (req, res) => {
     res.render('register')
 })
 
+router.get('/registerFirst', (req, res) => {
+    req.flash('info', 'Please register first!')
+    res.redirect('register')
+})
+
 router.post('/register', (req, res) => {
     const { name, email, password, password2 } = req.body
     let errors = []
@@ -83,15 +88,7 @@ router.post('/login', (req, res, next) => {
 router.get('/logout', (req, res) => {
     req.logOut()
     req.flash('success_msg', 'You are logged out')
-    res.redirect('/users/login')
-})
-
-router.get('/register:code', async (req, res) => {
-    const exchangeCode = req.params.code
-    const exchange = await Exchange.findOne({ exchangeCode})
-    res.render('register', {
-        exchangeCode
-    })
+    res.redirect('/')
 })
 
 

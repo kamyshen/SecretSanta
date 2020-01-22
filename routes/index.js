@@ -1,6 +1,7 @@
 const express = require('express')
 const router = express.Router()
 const Exchange = require('../models/Exchange')
+const User = require('../models/User')
 const passport = require('passport')
 const { ensureAuthenticated } = require('../config/auth')
 
@@ -21,22 +22,15 @@ router.get('/profile', ensureAuthenticated, async (req, res) => {
     const imOrganizer = Exchange.find({
         organizer: req.user.email
     })
-    // const imInExchange = Exchange.find({
-    //
-    // })
-    console.log(imOrganizer)
+    // console.log(imOrganizer)
     res.render('profile', {
         exchangeCode,
         name
     })
 })
 
-router.get('/profile:exchangeCode', (req, res) => {
-    res.send('\'/profile:exchangeCode\'')
-})
-
 router.post('/setup', ensureAuthenticated, (req, res) => {
-    const { name, date, isParticipant, priceCap } = req.body
+    const { name, date, start, isParticipant, priceCap } = req.body
     let exchangeCode = Math.random().toString(36).substr(2, 5)
     let options = {
         priceCap: priceCap || undefined,
@@ -44,8 +38,10 @@ router.post('/setup', ensureAuthenticated, (req, res) => {
     }
     const newExchange = new Exchange({
         name,
-        zerodate: date,
+        date,
+        start,
         organizer: req.user.email,
+        participants: [req.user.email],
         options,
         exchangeCode
     })
@@ -55,6 +51,55 @@ router.post('/setup', ensureAuthenticated, (req, res) => {
             res.redirect('profile')
         })
         .catch(err => console.log(err))
+})
+
+router.get('/join', (req, res) => {
+    res.render('join', {
+        haveCode: false
+    })
+})
+
+router.post('/join', async (req, res) => {
+    try {
+        const email = req.user.email
+        const participant = await Exchange.find({ participants: email })
+        if (participant) {
+            res.render('join', {
+                haveCode: false,
+                success_msg: 'You are already signed up for this exchange!'
+            })
+            return
+        }
+        await Exchange.findOneAndUpdate( {exchangeCode: req.session.exchangeCode}, { $push: {participants: email} } )
+        req.flash('success_msg', 'You successfully signed up for this exchange!')
+        res.render('join', {
+            haveCode: false,
+            success_msg: 'You successfully signed up for this exchange!'
+        })
+    } catch(err) { console.log(err) }
+
+})
+
+router.post('/code', async (req, res) => {
+    try {
+        const code = req.body.code
+        const exchange = await Exchange.findOne({ exchangeCode: code} )
+        if (!exchange) {
+            req.flash('error', 'Could not find an exchange with such a code')
+            res.redirect('join')
+            return
+        }
+        const author = await User.findOne( {email: exchange.organizer} )
+        const count = exchange.participants.length
+        res.render('join', {
+            author: author.name,
+            date: exchange.date,
+            start: exchange.start,
+            priceCap: exchange.options.priceCap,
+            count,
+            haveCode: true
+        })
+    } catch(err) { console.log(err) }
 })
 
 

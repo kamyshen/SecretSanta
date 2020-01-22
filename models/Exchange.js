@@ -9,18 +9,21 @@ const ExchangeSchema = mongoose.Schema({
         type: String,
         required: true
     },
-    date: {
+    created: {
         type: Date,
         default: Date.now
     },
-    zerodate: {
+    start: {
+        type: Date,
+        required: true
+    },
+    date: {
         type: Date,
         required: true
     },
     participants: [
         {
-            type: mongoose.Schema.ObjectId,
-            ref: 'User'
+           type: String
         }
     ],
     options: {
