@@ -13,11 +13,7 @@ const ExchangeSchema = mongoose.Schema({
         type: Date,
         default: Date.now
     },
-    start: {
-        type: Date,
-        required: true
-    },
-    date: {
+    giftDate: {
         type: Date,
         required: true
     },

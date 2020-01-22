@@ -16,7 +16,7 @@ router.get('/setup', (req, res) => {
 })
 
 router.get('/profile', ensureAuthenticated, async (req, res) => {
-    let exchangeCode = req.session.exchangeCode
+    const exchangeCode = req.session.exchangeCode
     let name = req.user.name
 
     const imOrganizer = Exchange.find({
@@ -30,7 +30,7 @@ router.get('/profile', ensureAuthenticated, async (req, res) => {
 })
 
 router.post('/setup', ensureAuthenticated, (req, res) => {
-    const { name, date, start, isParticipant, priceCap } = req.body
+    const { name, giftDate, isParticipant, priceCap } = req.body
     let exchangeCode = Math.random().toString(36).substr(2, 5)
     let options = {
         priceCap: priceCap || undefined,
@@ -38,8 +38,7 @@ router.post('/setup', ensureAuthenticated, (req, res) => {
     }
     const newExchange = new Exchange({
         name,
-        date,
-        start,
+        giftDate,
         organizer: req.user.email,
         participants: [req.user.email],
         options,
@@ -63,7 +62,7 @@ router.post('/join', async (req, res) => {
     try {
         const email = req.user.email
         const participant = await Exchange.find({ participants: email })
-        if (participant) {
+        if (participant.length != 0) {
             res.render('join', {
                 haveCode: false,
                 success_msg: 'You are already signed up for this exchange!'
@@ -93,8 +92,7 @@ router.post('/code', async (req, res) => {
         const count = exchange.participants.length
         res.render('join', {
             author: author.name,
-            date: exchange.date,
-            start: exchange.start,
+            giftDate: exchange.giftDate,
             priceCap: exchange.options.priceCap,
             count,
             haveCode: true
