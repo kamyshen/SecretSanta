@@ -24,9 +24,11 @@
                     </div>
                     <div class="card-body">
                         <ul class="list-group list-group-flush">
-                            <li class="list-group-item">The gift-giving day: <%= giftDate %></li>
+                            <li class="list-group-item">The gift-giving day: <%= giftDate.toLocaleDateString() %></li>
                             <li class="list-group-item">Participants now: <%= count %></li>
+                            <% if (priceCap) { %>
                             <li class="list-group-item">The price cap set for this exchange: <%= priceCap %></li>
+                            <% } %>
                         </ul>
                         <div class="card-footer">
                             <form class="form-signin" method="post" action="/join">

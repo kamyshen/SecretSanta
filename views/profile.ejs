@@ -1,28 +1,72 @@
 <div class="row mt-5">
     <div class="col-md-6 m-auto">
-        <div class="card card-body">
-            <h1 class="text-center mb-3">Welcome to your Profile, <%= name %></h1>
-            <% if (exchangeCode) { %>
-                <p>You successfully set up a new gift exchange!
-                    To invite new people to take part in it, copy this code
-                    and pass it over to anyone you'd like to invite.
-                They can use this code to join the exchange on Home page</p>
-                <h1 class="text-center"><strong><%= exchangeCode %></strong></h1>
-            <% } %>
+        <div class="card">
+            <div class="card-body">
+                <h1 class="text-center mb-3">Welcome, <%= name %></h1>
+                <% if (isOrganizer) { %>
+                    <% if (exchangeCode) { %>
+                    <p>You successfully set up a new gift exchange!
+                        To invite new people to take part in it, copy this code
+                        and pass it over to anyone you'd like to invite.
+                    They can use this code to join the exchange on Home page</p>
+                    <h1 class="text-center"><strong><%= exchangeCode %></strong></h1>
+                    <% } %>
+                <% } %>
+            </div>
         </div>
     </div>
 </div>
+
+<% if (isOrganizer) { %>
 <div class="row mt-5">
     <div class="col-md-6 m-auto">
-        <div class="card card-body">
-            <h1 class="text-center mb-3">List of your exchanges</h1>
-
-                <p>You successfully set up a new gift exchange!<br>
-                    To invite new people to take part in it, copy this code <br>
-                    and pass it over to anyone you'd like to invite.</p>
-                <h1 class="text-center"><strong>something</strong></h1>
+        <div class="card">
+            <div class="card-header">
+                <h3 class="text-center mb-3">Exchanges you created</h3>
+            </div>
+            <% DataOrganizer.forEach( exchange => { %>
+                <div class="card-body">
+                    <li class="list-group-item">The gift-giving day: <%= exchange.giftDate %></li>
+                    <li class="list-group-item">Participants now:
+                        <%= exchange.participants.join(', ') %>
+                    </li>
+                    <li class="list-group-item">ExchangeCode: <%= exchange.exchangeCode %></li>
+                    <% if (exchange.priceCap) { %>
+                        <li class="list-group-item">The price cap set for this exchange: <%= exchange.priceCap %></li>
+                    <% } %>
+                    <li class="list-group-item">
+                        <button class="btn-sm btn-primary" type="button">Randomize</button>
+                    </li>
+                </div>
+            <% }) %>
         </div>
     </div>
 </div>
+<% } %>
+
+<% if (isParticipant) { %>
+<div class="row mt-5">
+    <div class="col-md-6 m-auto">
+        <div class="card">
+            <div class="card-header">
+                <h3 class="text-center mb-3">Exchanges you signed up for</h3>
+            </div>
+            <% DataParticipant.forEach( exchange => { %>
+            <div class="card-body">
+                <li class="list-group-item">Created by: <%= exchange.organizer %></li>
+                <li class="list-group-item">The gift-giving day: <%= exchange.giftDate %></li>
+                <li class="list-group-item">Participants now: <%= exchange.count %></li>
+                <% if (exchange.priceCap) { %>
+                <li class="list-group-item">The price cap set for this exchange: <%= exchange.priceCap %></li>
+                <% } %>
+            </div>
+            <% }) %>
+        </div>
+    </div>
+</div>
+<% } %>
+
+
+
 
 

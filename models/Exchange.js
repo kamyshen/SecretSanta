@@ -6,7 +6,8 @@ const ExchangeSchema = mongoose.Schema({
         required: true
     },
     organizer: {
-        type: String,
+        type: mongoose.Schema.ObjectId,
+        ref: 'User',
         required: true
     },
     created: {
@@ -19,12 +20,12 @@ const ExchangeSchema = mongoose.Schema({
     },
     participants: [
         {
-           type: String
+           type: mongoose.Schema.ObjectId,
+            ref: 'User'
         }
     ],
     options: {
         priceCap: String,
-        isParticipant: String
     },
     exchangeCode: {
         type: String,
