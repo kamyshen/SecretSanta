@@ -4,6 +4,7 @@ const Exchange = require('../models/Exchange')
 const User = require('../models/User')
 const passport = require('passport')
 const { ensureAuthenticated } = require('../config/auth')
+const { shuffleArray } = require('../config/randomize')
 
 router.get('/', (req, res) => {
     res.render('welcome')
@@ -22,7 +23,7 @@ router.get('/profile', ensureAuthenticated, async (req, res) => {
         const exchangeCode = req.session.exchangeCode
 
         const exchangeOrgPromise = Exchange.find({ organizer: user }).populate('participants')
-        const exchangePartPromise = Exchange.find({ participants: user }).populate('organizer')
+        const exchangePartPromise = Exchange.find({ participants: user }).populate('organizer participants')
         const [exchangeOrg, exchangePart] = await Promise.all([exchangeOrgPromise, exchangePartPromise])
 
         const isOrganizer = exchangeOrg.length != 0
@@ -32,21 +33,31 @@ router.get('/profile', ensureAuthenticated, async (req, res) => {
         exchangeOrg.forEach(ex => {
             const participants = ex.participants.map(o => o.name === req.user.name ? 'YOU' : o.name)
             const priceCap = ex.options.priceCap || undefined
+            const randomized = ex.randomized
             DataOrganizer.push({
                 giftDate: ex.giftDate.toLocaleDateString(),
                 exchangeCode: ex.exchangeCode,
                 participants,
-                priceCap
+                priceCap,
+                randomized
             })
         })
 
         const DataParticipant = []
         exchangePart.forEach(ex => {
             const priceCap = ex.options.priceCap || undefined
+            let target
+            if (ex.randomized) {
+                const participants = ex.participants.map(p => p._id)
+                const targetIndex = participants.indexOf(req.user._id) !== participants.length - 1
+                ? participants.indexOf(req.user._id) + 1 : 0
+                target = ex.participants[targetIndex].name
+            }
             DataParticipant.push({
                 giftDate: ex.giftDate.toLocaleDateString(),
                 count: ex.participants.length,
                 priceCap,
+                target,
                 organizer: ex.organizer.name === req.user.name ? 'YOU' : ex.organizer.name
             })
         })
@@ -119,16 +130,41 @@ router.post('/code', ensureAuthenticated, async (req, res) => {
             res.redirect('join')
             return
         }
-        const author = req.user.name === exchange.organizer.name ? 'YOU' : exchange.organizer.name
-        const count = exchange.participants.length
-        res.render('join', {
-            author,
-            giftDate: exchange.giftDate,
-            priceCap: exchange.options.priceCap,
-            count,
-            haveCode: true
-        })
+        if (!exchange.randomized) {
+            const author = req.user.name === exchange.organizer.name ? 'YOU' : exchange.organizer.name
+            const count = exchange.participants.length
+            res.render('join', {
+                author,
+                giftDate: exchange.giftDate,
+                priceCap: exchange.options.priceCap,
+                count,
+                haveCode: true
+            })
+        } else {
+            req.flash('error', 'Sorry, but it is too late to join this exchange. The organizer has already randomized the participants')
+            res.redirect('join')
+            return
+        }
+
     } catch(err) { console.log(err) }
+})
+
+router.post('/randomize', ensureAuthenticated, async (req, res) => {
+    try {
+        const codeToRandom = req.body.codeToRandom
+        const exchangeToRandom = await Exchange.findOne({
+            exchangeCode: codeToRandom
+        }).populate('participants')
+
+        if (!exchangeToRandom.randomized) {
+            const arrToRand = exchangeToRandom.participants
+            shuffleArray((arrToRand))
+            await Exchange.findOneAndUpdate({exchangeCode: codeToRandom}, { $set: {participants: arrToRand, randomized: true}})
+        }
+        res.redirect('/profile')
+    } catch (err) { console.log(err) }
+
+
 })
 
 

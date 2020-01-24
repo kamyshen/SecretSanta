@@ -39,7 +39,6 @@ app.use((req, res, next) => {
     res.locals.error = req.flash('error')
     res.locals.info = req.flash('info')
     res.locals.isAuthenticated = req.isAuthenticated()
-    // res.locals.exchangeCode = req.flash('exchangeCode')
     next()
 })
 

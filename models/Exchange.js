@@ -21,7 +21,7 @@ const ExchangeSchema = mongoose.Schema({
     participants: [
         {
            type: mongoose.Schema.ObjectId,
-            ref: 'User'
+            ref: 'User',
         }
     ],
     options: {
@@ -31,6 +31,10 @@ const ExchangeSchema = mongoose.Schema({
         type: String,
         required: true,
         trim: true,
+    },
+    randomized: {
+        type: Boolean,
+        default: false
     }
 
 })

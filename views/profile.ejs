@@ -24,7 +24,7 @@
             <div class="card-header">
                 <h3 class="text-center mb-3">Exchanges you created</h3>
             </div>
-            <% DataOrganizer.forEach( exchange => { %>
+            <% DataOrganizer.forEach(exchange => { %>
                 <div class="card-body">
                     <li class="list-group-item">The gift-giving day: <%= exchange.giftDate %></li>
                     <li class="list-group-item">Participants now:
@@ -34,9 +34,19 @@
                     <% if (exchange.priceCap) { %>
                         <li class="list-group-item">The price cap set for this exchange: <%= exchange.priceCap %></li>
                     <% } %>
-                    <li class="list-group-item">
-                        <button class="btn-sm btn-primary" type="button">Randomize</button>
+                    <% if(!exchange.randomized) { %>
+                    <li class="list-group-item text-center">
+                        <form action="/randomize" method="post">
+                            <input type="text" hidden name="codeToRandom" value="<%= exchange.exchangeCode %>">
+                            <button class="btn-sm btn-primary" type="submit">Randomize</button>
+                            <span>(It cannot be undone!)</span>
+                        </form>
                     </li>
+                    <% } else { %>
+                    <li class="list-group-item">
+                        <span><strong>It has been randomized, and now every participant can see in their profile who they're preparing a gift for</strong></span>
+                    </li>
+                    <% } %>
                 </div>
             <% }) %>
         </div>
@@ -58,6 +68,9 @@
                 <li class="list-group-item">Participants now: <%= exchange.count %></li>
                 <% if (exchange.priceCap) { %>
                 <li class="list-group-item">The price cap set for this exchange: <%= exchange.priceCap %></li>
+                <% } %>
+                <% if (exchange.target) { %>
+                <li class="list-group-item"><strong>You are preparing a gift for <%= exchange.target %>!</strong></li>
                 <% } %>
             </div>
             <% }) %>
