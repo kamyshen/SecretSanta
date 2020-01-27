@@ -5,14 +5,15 @@ const flash = require('connect-flash')
 const session = require('express-session')
 const passport = require('passport')
 const MongoStore = require('connect-mongo')(session);
-const cookieParser = require('cookie-parser')
 const i18n = require('i18n-2')
 
 const app = express()
 
+require('dotenv').config({ path: 'variables.env' })
+
 require('./config/passport')(passport)
 
-const db = require('./config/keys').MongoURI
+const db = process.env.MongoURI
 mongoose.connect(db, { useNewUrlParser: true, useUnifiedTopology: true, useFindAndModify: false})
     .then(() => console.log('Mongo DB connected...'))
     .catch(err => console.log(err))
@@ -21,7 +22,6 @@ app.use(expressLayouts)
 app.set('view engine', 'ejs')
 
 app.use(express.urlencoded({ extended: false}))
-app.use(cookieParser())
 
 app.use(session({
     secret: 'secret',
@@ -46,9 +46,6 @@ i18n.expressBind(app, {
 
 app.use(function(req, res, next) {
     req.i18n.setLocaleFromSessionVar();
-    // console.log(req.i18n)
-    // console.log(req.session)
-    // console.log('working', req.i18n.getLocale())
     next();
 });
 
