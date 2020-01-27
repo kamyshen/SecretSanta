@@ -1,33 +1,60 @@
-<div class="card card-body text-center">
+<div id="welcome-card" class="card card-body text-center mx-auto mt-4">
 
-    <h1 class="display-3">Secret Santa</h1>
-    <p class="lead">Gift exchange "Secret Santa" works in 3 steps:<br />
-        1. Participants register for a gift exchange.<br />
-        2. The site randomizes them so that everyone knows the person they're preparing a gift for.<br />
-        3. When the date of exchange comes, people give each other what they've prepared.<br />
-        But until then no one knows who's giving a gift to them.<br />
-        So it's a lot of fun! Go ahead and try it out!</p>
+    <h1 id="title-welcome" class="display-3"><strong><%= title %></strong></h1>
+    <p class="lead"><%= desc1 %><br><%= desc2 %></p>
     <hr class="my-4">
+
+    <button type="button" class="btn btn-primary mx-auto" data-toggle="modal" data-target="#ModalCenter">
+        <h5><%= btnWork %></h5>
+    </button>
+
+    <hr class="my-4">
+    <!-- Modal -->
+    <div class="modal fade" id="ModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+            <div class="modal-content">
+
+                <div class="modal-body text-left">
+                    <p class="lead"><%= howThisWorks1 %></p>
+                    <p class="lead"><%= howThisWorks2 %></p>
+                    <p class="lead"><%= howThisWorks3 %></p>
+                    <p class="lead"><%= howThisWorks4 %></p>
+                    <p class="lead"><%= howThisWorks5 %></p>
+                    <p class="lead"><%= howThisWorks6 %></p>
+                    <p class="lead"><%= howThisWorks7 %></p>
+                    <p class="lead"><strong><%= howThisWorks8 %></strong></p>
+                    <p class="lead"><%= howThisWorks9 %></p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal"><%= close %></button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+
     <% if (!isAuthenticated) { %>
     <div class="buttons d-flex">
         <div class="imgHolder">
             <a href="/users/registerFirst" role="button"><img src="/images/setupnew.jpg" width="200" alt="giving"></a>
-            <span><h4>Set up a new gift exchange</h4></span>
+            <span><h5><%= setupNew %></h5></span>
         </div>
         <div class="imgHolder">
             <a href="/users/registerFirst" role="button"><img src="/images/haveacode.png" width="280" alt="giving"></a>
-            <span><h4>I have an invitation code</h4></span>
+            <span><h5><%= iHaveANewCode %></h5></span>
         </div>
     </div>
     <% } else { %>
         <div class="buttons d-flex">
             <div class="imgHolder">
                 <a href="/setup" role="button"><img src="/images/setupnew.jpg" width="200" alt="giving"></a>
-                <span><h5>Set up a new gift exchange</h5></span>
+                <span><h5><%= setupNew %></h5></span>
             </div>
             <div class="imgHolder">
                 <a href="/join" role="button"><img src="/images/haveacode.png" width="280" alt="giving"></a>
-                <span><h5>I have an invitation code</h5></span>
+                <span><h5><%= iHaveANewCode %></h5></span>
             </div>
         </div>
     <% } %>

@@ -2,13 +2,10 @@
     <div class="col-md-6 m-auto">
         <div class="card">
             <div class="card-body">
-                <h1 class="text-center mb-3">Welcome, <%= name %></h1>
+                <h1 class="text-center mb-3"><%= welcome%>, <%= name %></h1>
                 <% if (isOrganizer) { %>
                     <% if (exchangeCode) { %>
-                    <p>You successfully set up a new gift exchange!
-                        To invite new people to take part in it, copy this code
-                        and pass it over to anyone you'd like to invite.
-                    They can use this code to join the exchange on Home page</p>
+                    <p><%= youSetupANew%></p>
                     <h1 class="text-center"><strong><%= exchangeCode %></strong></h1>
                     <% } %>
                 <% } %>
@@ -22,29 +19,29 @@
     <div class="col-md-6 m-auto">
         <div class="card">
             <div class="card-header">
-                <h3 class="text-center mb-3">Exchanges you created</h3>
+                <h3 class="text-center mb-3"><%= ExchangesYouCreated%></h3>
             </div>
             <% DataOrganizer.forEach(exchange => { %>
                 <div class="card-body">
-                    <li class="list-group-item">The gift-giving day: <%= exchange.giftDate %></li>
-                    <li class="list-group-item">Participants now:
+                    <li class="list-group-item"><%= giftgivingDay%>: <%= exchange.giftDate %></li>
+                    <li class="list-group-item"><%= participantsNum%>:
                         <%= exchange.participants.join(', ') %>
                     </li>
-                    <li class="list-group-item">ExchangeCode: <%= exchange.exchangeCode %></li>
+                    <li class="list-group-item"><%= exchangeCodetext%>: <%= exchange.exchangeCode %></li>
                     <% if (exchange.priceCap) { %>
-                        <li class="list-group-item">The price cap set for this exchange: <%= exchange.priceCap %></li>
+                        <li class="list-group-item"><%= priceCapfor%>: <%= exchange.priceCap %></li>
                     <% } %>
                     <% if(!exchange.randomized) { %>
                     <li class="list-group-item text-center">
-                        <form action="/randomize" method="post">
+                        <form class="d-flex" action="/randomize" method="post">
                             <input type="text" hidden name="codeToRandom" value="<%= exchange.exchangeCode %>">
-                            <button class="btn-sm btn-primary" type="submit">Randomize</button>
-                            <span>(It cannot be undone!)</span>
+                            <button class="btn-sm btn-primary" type="submit"><%= randomize%></button>
+                            <span><%= cannotUndone%></span>
                         </form>
                     </li>
                     <% } else { %>
                     <li class="list-group-item">
-                        <span><strong>It has been randomized, and now every participant can see in their profile who they're preparing a gift for</strong></span>
+                        <span><strong><%= beenRandomized%></strong></span>
                     </li>
                     <% } %>
                 </div>
@@ -59,18 +56,18 @@
     <div class="col-md-6 m-auto">
         <div class="card">
             <div class="card-header">
-                <h3 class="text-center mb-3">Exchanges you signed up for</h3>
+                <h3 class="text-center mb-3"><%= youSignedupfor%></h3>
             </div>
             <% DataParticipant.forEach( exchange => { %>
             <div class="card-body">
-                <li class="list-group-item">Created by: <%= exchange.organizer %></li>
-                <li class="list-group-item">The gift-giving day: <%= exchange.giftDate %></li>
-                <li class="list-group-item">Participants now: <%= exchange.count %></li>
+                <li class="list-group-item"><%= createdBy%>: <%= exchange.organizer %></li>
+                <li class="list-group-item"><%= giftgivingDay%>: <%= exchange.giftDate %></li>
+                <li class="list-group-item"><%= participantsNum%>: <%= exchange.count %></li>
                 <% if (exchange.priceCap) { %>
-                <li class="list-group-item">The price cap set for this exchange: <%= exchange.priceCap %></li>
+                <li class="list-group-item"><%= priceCapfor%>: <%= exchange.priceCap %></li>
                 <% } %>
                 <% if (exchange.target) { %>
-                <li class="list-group-item"><strong>You are preparing a gift for <%= exchange.target %>!</strong></li>
+                <li class="list-group-item"><strong><%= YouPreparingFor%> <%= exchange.target %>!</strong></li>
                 <% } %>
             </div>
             <% }) %>

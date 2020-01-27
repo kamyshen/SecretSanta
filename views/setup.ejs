@@ -6,7 +6,7 @@
                     <!-- Background image for card set in CSS! -->
                 </div>
                 <div class="card-body data-setup-card">
-                    <h5 class="card-title text-center">Set up a new gift exchange</h5>
+                    <h5 class="card-title text-center"><strong><%= titleExchange %></strong></h5>
                     <form class="form-signin" method="post">
                         <div class="form-label-group">
                             <input
@@ -16,7 +16,7 @@
                                     class="form-control"
                                     required
                             />
-                            <label for="name">Name of a new gift exchange</label>
+                            <label for="name"><%= nameExchange%></label>
                         </div>
 
                         <div class="form-label-group">
@@ -28,7 +28,7 @@
                                     class="form-control"
                                     placeholder="Date of the exchange"
                                     required>
-                            <label for="inputDate">A gift-giving day</label>
+                            <label for="inputDate"><%= DateExchange%></label>
                         </div>
 
                         <hr>
@@ -36,14 +36,18 @@
                         <div class="form-label-group">
                         <div class="custom-control custom-control-right custom-switch">
                             <input type="checkbox" class="custom-control-input" id="isParticipant" name="isParticipant"checked>
-                            <label class="custom-control-label data-first" for="isParticipant">Are you going to be a participant?</label>
+                            <label class="custom-control-label data-first"
+                            <% if (lang === 'ru') { %>
+                                   style="padding-right: 3.4rem;"
+                             <% } %>
+                                   for="isParticipant"><%= youParticipate%></label>
                         </div>
                         </div>
 
                         <div class="form-label-group">
                         <div class="custom-control custom-control-right custom-switch">
                             <input type="checkbox" class="custom-control-input" id="isPriceCap" name="isPriceCap">
-                            <label class="custom-control-label" for="isPriceCap">Would you like to set a price cap on the presents?</label>
+                            <label class="custom-control-label" for="isPriceCap"><%= limitExchange%></label>
                         </div>
                         </div>
 
@@ -54,10 +58,10 @@
                                     name="priceCap"
                                     class="form-control"
                             />
-                            <label for="priceCap">Enter the amount and the currency</label>
+                            <label for="priceCap"><%= priceCap%></label>
                         </div>
 
-                        <button class="btn btn-lg btn-primary btn-block text-uppercase" type="submit">Set up a new exchange</button>
+                        <button class="btn btn-lg btn-primary btn-block text-uppercase" type="submit"><%= setupExchange%></button>
                         <hr class="my-4">
                     </form>
 

@@ -7,32 +7,32 @@
             <div class="card-body">
                 <%- include('./partials/messages.ejs'); %>
                 <% if (!haveCode) { %>
-                <h5 class="card-title text-center">Join an exchange</h5>
+                <h5 class="card-title text-center"><strong><%= join%></strong></h5>
                 <form class="form-signin" method="post" action="/code">
                     <div class="form-label-group">
                         <input type="text" name="code" id="code" class="form-control" placeholder="Invitation code" required autofocus>
-                        <label for="code">Please put in the invitation code</label>
+                        <label for="code"><%= putInCode%></label>
                     </div>
 
-                    <button class="btn btn-lg btn-primary btn-block text-uppercase" type="submit">Submit</button>
+                    <button class="btn btn-lg btn-primary btn-block text-uppercase" type="submit"><%= submit%></button>
                 </form>
                 <% } else { %>
 
                 <div class="card">
                     <div class="card-header">
-                        This exchange was created by <%= author %>
+                        <%= createdBy%> <%= author %>
                     </div>
                     <div class="card-body">
                         <ul class="list-group list-group-flush">
-                            <li class="list-group-item">The gift-giving day: <%= giftDate.toLocaleDateString() %></li>
-                            <li class="list-group-item">Participants now: <%= count %></li>
+                            <li class="list-group-item"><%= giftgivingDay%>: <%= giftDate.toLocaleDateString() %></li>
+                            <li class="list-group-item"><%= participantsNum%>: <%= count %></li>
                             <% if (priceCap) { %>
-                            <li class="list-group-item">The price cap set for this exchange: <%= priceCap %></li>
+                            <li class="list-group-item"><%= priceCapfor%>: <%= priceCap %></li>
                             <% } %>
                         </ul>
                         <div class="card-footer">
                             <form class="form-signin" method="post" action="/join">
-                                <button class="btn btn-lg btn-primary btn-block text-uppercase" type="submit">Join</button>
+                                <button class="btn btn-lg btn-primary btn-block text-uppercase" type="submit"><%= joinBtn%></button>
                             </form>
                         </div>
 

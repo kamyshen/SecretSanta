@@ -3,19 +3,24 @@ const router = express.Router()
 const bcrypt = require('bcryptjs')
 const passport = require('passport')
 const { ensureAuthenticated } = require('../config/auth')
+const langOptions = require('../config/langOptions')
 
 const User = require('../models/User')
 
 router.get('/login', (req, res) => {
-    res.render('login')
+    res.render('login', langOptions.loginOptions(req))
 })
 
 router.get('/register', (req, res) => {
-    res.render('register')
+    res.render('register', langOptions.registerOptions(req))
 })
 
 router.get('/registerFirst', (req, res) => {
-    req.flash('info', 'Please register first!')
+    if (req.session.locale === 'ru') {
+        req.flash('info', 'Пожалуйста, сначала зарегистрируйтесь!')
+    } else {
+        req.flash('info', 'Please register first!')
+    }
     res.redirect('register')
 })
 
@@ -23,13 +28,26 @@ router.post('/register', (req, res) => {
     const { name, email, password, password2 } = req.body
     let errors = []
     if (!name || !email || !password || !password2) {
-        errors.push({ msg: 'Please fill in all fields!'})
+        if (req.session.locale === 'ru') {
+            errors.push({ msg: 'Пожалуйста, заполните все поля!'})
+            } else {
+            errors.push({ msg: 'Please fill in all fields!'})
+        }
     }
+
     if (password !== password2) {
-        errors.push({ msg: 'Passwords do not match'})
+        if (req.session.locale === 'ru') {
+            errors.push({msg: 'Пароли не совпадают'})
+        } else {
+            errors.push({msg: 'Passwords do not match'})
+        }
     }
     if (password.length < 6) {
-        errors.push({ msg: 'Password should be at least 6 characters'})
+        if (req.session.locale === 'ru') {
+            errors.push({ msg: 'Пароль должен быть длиной как минимум 6 символов'})
+        } else {
+            errors.push({ msg: 'Password should be at least 6 characters'})
+        }
     }
     if (errors.length > 0) {
         res.render('register', {
@@ -37,19 +55,25 @@ router.post('/register', (req, res) => {
             name,
             email,
             password,
-            password2
+            password2,
+            ...langOptions.registerOptions(req)
         })
     } else {
         User.findOne({ email: email })
             .then(user => {
                 if (user) {
-                    errors.push({ msg: 'Email is already registered'})
+                    if (req.session.locale === 'ru') {
+                        errors.push({ msg: 'Такой email уже зарегистрирован'})
+                    } else {
+                        errors.push({ msg: 'Email is already registered'})
+                    }
                     res.render('register', {
                         errors,
                         name,
                         email,
                         password,
-                        password2
+                        password2,
+                        ...langOptions.registerOptions(req)
                     })
                 } else {
                     const newUser = new User({
@@ -64,7 +88,11 @@ router.post('/register', (req, res) => {
                             newUser.password = hash
                             newUser.save()
                                 .then(user => {
-                                    req.flash('success_msg', 'You are now registered and can log in')
+                                    if (req.session.locale === 'ru') {
+                                        req.flash('success_msg', 'Вы успешно зарегистрированы')
+                                    } else {
+                                        req.flash('success_msg', 'You are now registered and can log in')
+                                    }
                                     res.redirect('/users/login')
                                 })
                                 .catch(err => console.log(err))
@@ -88,7 +116,12 @@ router.post('/login', (req, res, next) => {
 router.get('/logout', (req, res) => {
     req.logOut()
     req.session.exchangeCode = undefined
-    req.flash('success_msg', 'You are logged out')
+    if (req.session.locale === 'ru') {
+        req.flash('success_msg', 'Вы вышли из своего аккаунта')
+    } else {
+        req.flash('success_msg', 'You are logged out')
+    }
+    req.session.locale = ''
     res.redirect('/')
 })
 
